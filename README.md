@@ -1,6 +1,6 @@
 # Q-Variance Challenge
 
-Can any continuous-time stochastic-volatility model reproduce the exact one-parameter parabolic relationship  
+Can any continuous-time stochastic-volatility model reproduce the parabolic relationship  
 σ(z) = √(σ₀² + z²/2)  
 across 200+ assets and all horizons 1-26 weeks with R² ≥ 0.92 and ≤ 2 free parameters?
 
