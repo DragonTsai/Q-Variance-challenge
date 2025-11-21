@@ -41,19 +41,35 @@ Good luck.
 **Frequently Asked Questions**
 
 Q: Is q-variance a well-known "stylized fact"?
+
 A: No, a stylized fact is just a general observation about market data, as opposed to a firm prediction. Q-variance is a falsifiable prediction because the multiplicative constant on the quadratic term is not a fit, it is set by theory at 0.5. The same formula applies for all period lengths T.
 
 Q: Is q-variance a large effect?
-A: Yes, the minimum variance is about half the total variance so this is a large effect.
+
+A: Yes, the minimum variance is about half the total variance so this is a large effect. If you are modelling variance then you need to take q-variance into account.
 
 Q: Has q-variance been previously reported in the literature?
+
 A: Not to our knowledge, and we have asked many experts, but please bring any references to our attention.
 
 Q: Does q-variance have implications for finance?
+
 A: Yes, it means that standard formulas such as Black-Scholes or the formula used to calculate VIX will not work as expected.
 
 Q: Is q-variance related to the implied volatility smile?
-A: Yes, but it is not the same thing because it applies to realized volatility.
+
+A: Yes, but it is not the same thing because q-variance applies to realized volatility.
+
+Q: Is q-variance related to the price-change distribution over a period?
+
+A: Yes, it implies that price-change follows the q-distribution which is a particular time-invariant, Poisson-weighted sum of Gaussians.
 
 Q: Can I use AI for the challenge?
+
 A: Yes, AI entries are encouraged.
+
+**Further reading:**
+
+Orrell D (2025) A Quantum Jump Model of Option Pricing. The Journal of Derivatives 33(2).
+
+Orrell D (2025) Quantum impact and the supply-demand curve. Philosophical Transactions of the Royal Society A 383(20240562).
