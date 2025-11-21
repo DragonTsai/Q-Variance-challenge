@@ -37,6 +37,8 @@ Run the test mode to score your Parquet:
 
 ```bash
 python3 score_submission.py
+```
+
 1. Fork this repository
 2. Place your model output in `submissions/your_team_name/` as:
    - `prize_dataset.parquet` (must have columns: ticker, date, T, z, sigma)
