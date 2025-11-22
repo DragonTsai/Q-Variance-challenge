@@ -24,6 +24,11 @@ Dataset: 352 S&P 500 stocks (1992+ history), 1–26 weeks T, ~300K rows.
 
 Columns: ticker (str), date (date), T (int), sigma (float, annualized vol), z (float, scaled log return).
 
+Due to file size limits, the parquet file is divided into three parts. Combine them with the command:
+```python
+df = pd.concat([pd.read_parquet("dataset_part1.parquet"),pd.read_parquet("dataset_part2.parquet"),pd.read_parquet("dataset_part3.parquet")])
+'''
+
 Python dependencies: pip install yfinance pandas numpy scipy matplotlib pyarrow
 
 
