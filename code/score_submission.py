@@ -5,6 +5,9 @@ from scipy.optimize import curve_fit
 import json
 from datetime import datetime
 
+# use this line to load the parquet files from data_loader.py
+# df = pd.concat([pd.read_parquet("dataset_part1.parquet"),pd.read_parquet("dataset_part2.parquet"),pd.read_parquet("dataset_part3.parquet")])
+
 # Universal q-variance law: variance = σ₀² + z²/2
 def qvar(z, sigma0):
     return sigma0**2 + z**2 / 2
