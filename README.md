@@ -88,7 +88,7 @@ A: The quantum model predicts variance and the price-change distribution, but do
 
 Q: Can I use AI for the challenge?
 
-A: Yes, AI-assisted entries are encouraged. We used Grok to help design the challenge.
+A: Yes, AI-assisted entries are encouraged. We used Grok to help design the challenge. Its [entry](submissions/grok_rough_vol) was a rough volatility model.
 
 **Further reading:**
 
