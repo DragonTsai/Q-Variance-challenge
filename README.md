@@ -78,11 +78,15 @@ A: Yes, classical finance assumes a diffusive model for price change, which does
 
 Q: Is q-variance related to the implied volatility smile?
 
-A: Yes, but it is not the same thing because q-variance applies to realized volatility.
+A: Yes, however it is not the same thing because q-variance applies to realized volatility. But if you want to model implied volatility, a first step is to understand realized volatility.
 
 Q: Is q-variance related to the price-change distribution over a period?
 
 A: Yes, it implies that price-change follows the q-distribution which is a particular time-invariant, Poisson-weighted sum of Gaussians.
+
+Q: As seen in the figure above, the data clearly follows a parabola with a small offset so there is no way to beat the quantum model, whose only parameters are the minimum volatility and an offset, so what is the point in trying?
+
+A: The quantum model predicts variance and the price-change distribution, but does not provide a time series of daily prices. If a classical model can do that, and still produce the quadratic shape, then that will be very useful. We will therefore also give an honorable mention to any classical entry which can come close to matching the quantum model even if it involves extra parameters.
 
 Q: Can I use AI for the challenge?
 
