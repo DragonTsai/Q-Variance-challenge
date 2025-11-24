@@ -4,7 +4,7 @@
 
 Can any continuous-time stochastic-volatility model reproduce the parabolic relationship  
 σ(z)² = σ₀² + (z-zoff)²/2
-across all horizons 1-26 weeks with R² ≥ 0.99 and ≤ 2 free parameters?
+across all horizons 1-26 weeks with R² ≥ 0.995 and ≤ 2 free parameters?
 
 Here z = x/sqrt(T) where x is the log price change over a period T, adjusted for drift. Blue points in the figure are variance vs z for stocks from the S&P 500. Blue line is average variance as a function of z, red line is the q-variance curve. Read the [Q-Variance Wilmott paper](Q-Variance_Wilmott_July2025.pdf) for more details.
 
@@ -38,7 +38,7 @@ The challenge scores submissions on **one global R²** over the **entire dataset
 2. **Compute Variance**: Converts sigma → var = sigma².
 3. **Global Binning**: Bins z from -0.6 to 0.6 (delz=0.025), averages var per bin (as in `baseline_fit.py` global plot).
 4. **Fit**: Fits var = σ₀² + (z-zoff)²/2 to binned averages, computes R².
-5. **Threshold**: R² ≥ 0.99 with no more than two free parameters wins the challenge (baseline: 0.998).
+5. **Threshold**: R² ≥ 0.995 with no more than two free parameters wins the challenge (agreement of quantum with data is 0.998).
 
 ### Test Your Submission
 Run the test mode to score your Parquet:
@@ -92,7 +92,7 @@ A: The quantum model predicts variance and the price-change distribution, but do
 
 Q: Can I use AI for the challenge?
 
-A: Yes, AI-assisted entries are encouraged. We used Grok to help design and code the challenge. Its [entry](submissions/grok_rough_vol) is a rough volatility model which uses three parameters for an R² of 0.988 – close but no cigar!
+A: Yes, AI-assisted entries are encouraged. We used Grok to help design and code the challenge. Its [entry](submissions/grok_rough_vol) is a rough volatility model which achieves an R² of 0.995 but uses three parameters – close but no cigar!
 
 **Further reading:**
 
