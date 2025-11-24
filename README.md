@@ -68,7 +68,7 @@ A: Yes, the minimum variance is about half the total variance so this is a large
 
 Q: Has q-variance been previously reported in the literature?
 
-A: Not to our knowledge, and we have asked many experts, but please bring any references to our attention. If anyone has made the exact same prediction then we will announce them the winner.
+A: Not to our knowledge, and we have asked many experts, but please bring any references to our attention. If anyone has made the exact same prediction using a model then we will announce them the winner.
 
 Q: Does q-variance have implications for quantitative finance?
 
