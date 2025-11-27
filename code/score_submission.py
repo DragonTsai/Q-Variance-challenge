@@ -1,80 +1,73 @@
-# scoring/score_submission.py — (global R² over all stocks & horizons)
+# baseline_fit.py
+# comment out lines to read files in 3 parts or 1 part
 import pandas as pd
 import numpy as np
 from scipy.optimize import curve_fit
-import json
-from datetime import datetime
+import matplotlib.pyplot as plt
 
-# use this line to load the parquet files from data_loader.py
-# df = pd.concat([pd.read_parquet("dataset_part1.parquet"),pd.read_parquet("dataset_part2.parquet"),pd.read_parquet("dataset_part3.parquet")])
+# load the parquet files from data_loader.py
+###df = pd.concat([pd.read_parquet("dataset_part1.parquet"),pd.read_parquet("dataset_part2.parquet"),pd.read_parquet("dataset_part3.parquet")])
 
-# Universal q-variance law: variance = σ₀² + z²/2
-def qvar(z, sigma0):
-    return sigma0**2 + z**2 / 2
 
-def compute_qvar_score(df, submission_name="Submission", author="Anonymous"):
-    """
-    df: prize_dataset.parquet loaded as DataFrame
-        Columns: ['ticker', 'date', 'T', 'z', 'sigma']
-    Returns ONE global R² over the entire dataset (all stocks, all T).
-    """
-    # Convert sigma to variance
-    data = df.copy()
-    data["var"] = data["sigma"] ** 2
+df = pd.read_parquet("dataset.parquet")  # READ TEST DATA
 
-    print(f"Total data points: {len(data):,}")
+# Select S&P 500, T=5
+# data = df[(df["ticker"] == "^GSPC") & (df["T"] == 5)].copy()
+# data = df[(df["ticker"] == "^GSPC") ].copy()
+data = df.copy()
+data["var"] = data.sigma**2
 
-    # Fixed global binning
-    zmax = 0.6
-    delz = 0.025
-    nbins = int(2 * zmax / delz + 1)
-    bins = np.linspace(-zmax, zmax, nbins)
+#print(f"S&P 500 T=5: {len(data)} windows")
+print(f"{len(data)} windows")
+# print(f"mean z = {data["z"].mean()}")  # mean of z is zero
+print(f"z has NaNs: {data['z'].isna().sum()}")  # → 0
 
-    # Bin ALL data together (global fit)
-    data["z_bin"] = pd.cut(data["z"], bins=bins, include_lowest=True)
-    binned = (data.groupby("z_bin")
-                 .agg(z_mid=("z", "mean"), var=("var", "mean"))
-                 .dropna()
-                 .reset_index(drop=True))
 
-    print(f"Populated bins: {len(binned)}")
+zmax = 0.6
+delz = 0.025*2
+nbins = int(2*zmax/delz + 1)
+#bins = np.linspace(-0.5, 0.5, 41)         # fixed bins
+bins = np.linspace(-zmax, zmax, nbins)         # fixed bins
 
-    if len(binned) < 10:
-        r2_global = 0.0
-        sigma0 = np.nan
-    else:
-        try:
-            popt, _ = curve_fit(qvar, binned.z_mid.values, binned.var.values, p0=[0.08])
-            sigma0 = popt[0]
-            predicted = qvar(binned.z_mid.values, sigma0)
-            ss_res = np.sum((binned.var - predicted)**2)
-            ss_tot = np.sum((binned.var - binned.var.mean())**2)
-            r2_global = 1 - ss_res / ss_tot if ss_tot > 0 else 0.0
-        except Exception as e:
-            print(f"Fit failed: {e}")
-            r2_global = 0.0
-            sigma0 = np.nan
+# create data frame with e.g. zbin = (-0.601, -0.55], z_mid, sigma
+binned = (data.assign(z_bin=pd.cut(data.z, bins=bins, include_lowest=True))
+               .groupby('z_bin',observed=False)
+               .agg(z_mid=('z', 'mean'), var=('var', 'mean'))
+               .dropna())
 
-    score = {
-        "submission": submission_name,
-        "author": author,
-        "date": datetime.now().strftime("%Y-%m-%d"),
-        "total_points": len(data),
-        "global_r2": round(r2_global, 5),
-        "sigma0": round(sigma0, 4) if np.isfinite(sigma0) else None,
-        "passed": r2_global >= 0.92,
-        "message": "Q-Variance Prize: One Law for All Stocks & Horizons"
-    }
+# zmid = (bins[0:(nbins-1)] + bins[1:(nbins)])/2
 
-    return score
+def qvar(z, s0, zoff):    # define q-variance function, parameter is minimal volatility s0
+    return (s0**2 + (z - zoff)**2 / 2)
 
-# Test with your real data
-if __name__ == "__main__":
-    df = pd.read_parquet("prize_dataset.parquet")
-    score = compute_qvar_score(df, "Quantum Baseline (Orrell & Wilmott 2025)", "David Orrell")
-    
-    print("\n" + "="*60)
-    print("           Q-VARIANCE PRIZE — GLOBAL RESULT")
-    print("="*60)
-    print(json.dumps(score, indent=2))
-    print("="*60)
+# curve_fit returns a value popt and a covariance pcov, the _ means we ignore the pcov
+###popt, _ = curve_fit(qvar, binned.z_mid, binned["var"], p0=[0.02, 0])
+popt = [0.255, 0.020]  # same as optimized fit to data
+
+fitted = qvar(binned.z_mid, popt[0], popt[1])  # cols are z_bin, which is a range like (-0.601, -0.55], and qvar
+r2 = 1 - np.sum((binned["var"] - fitted)**2) / np.sum((binned["var"] - binned["var"].mean())**2)
+
+print(f"σ₀ = {popt[0]:.4f}  zoff = {popt[1]:.4f}  R² = {r2:.4f}")
+
+# plot of all stocks
+markfac = 1  # default is 1, can increase to 3 if less data points
+plt.figure(figsize=(9,7))
+plt.scatter(data.z, data['var'], c='steelblue', alpha=markfac*0.1, s=markfac*1, edgecolor='none')
+numeric_array = (1 - data["T"]/130)
+string_array = [str(x) for x in numeric_array]
+#plt.scatter(data.z, data['var'], c='steelblue', alpha=numeric_array, s=1, edgecolor='none')
+#plt.scatter(data.z, data['var'], c=string_array, alpha=0.1, s=1, edgecolor='none')
+plt.plot(binned.z_mid, binned['var'], 'b-', lw=3)     # label='binned'
+plt.plot(binned.z_mid, fitted, 'red', lw=3, label=f'σ₀ = {popt[0]:.3f}, zoff = {popt[1]:.3f}, R² = {r2:.3f}')
+
+plt.xlabel('z (scaled log return)', fontsize=12)
+plt.ylabel('Annualised variance', fontsize=12)
+plt.title('All data T=1 to 26 weeks – Q-Variance', fontsize=14)
+
+plt.xlim(-zmax, zmax) 
+plt.ylim(0.0, 0.35)
+
+plt.legend(fontsize=12)
+plt.grid(alpha=0.3)
+plt.tight_layout()
+plt.show()
