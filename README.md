@@ -4,7 +4,7 @@
 
 Can any continuous-time stochastic-volatility model reproduce the parabolic relationship  
 σ(z)² = σ₀² + (z-zoff)²/2
-across all horizons 1-26 weeks with R² ≥ 0.995 and ≤ 2 free parameters?
+across all horizons 1-26 weeks with R² ≥ 0.995 and ≤ 3 free parameters?
 
 Here z = x/sqrt(T) where x is the log price change over a period T, adjusted for drift. Blue points in the figure are variance vs z for stocks from the S&P 500. Blue line is average variance as a function of z, red line is the q-variance curve. Read the [Q-Variance Wilmott paper](Q-Variance_Wilmott_July2025.pdf) for more details.
 
@@ -31,14 +31,14 @@ Python dependencies: pip install yfinance pandas numpy scipy matplotlib pyarrow
 
 ## Scoring the Challenge
 
-The challenge scores submissions on **one global R²** over the **entire dataset**. Since the quantum model with σ₀=0.255 and zoff = 0.02 gives a near-perfect fit (R² = 0.998) this curve can be used as a proxy for the real data. In other words, the aim is to fit the parabola.
+The challenge scores submissions on **one global R²** over the **entire dataset**. Since the quantum model with σ₀=0.255 and zoff = 0.02 gives a near-perfect fit (R² = 0.998) this curve can be used as a proxy for the real data. In other words, the aim is to fit the two-parameter parabola, using **up to three parameters** – must be easy, right?
 
 ### How Scoring Works
 1. **Load Submission**: `score_submission.py` reads your `dataset.parquet` (must match format: ticker, date, T, z, sigma).
 2. **Compute Variance**: Converts sigma → var = sigma².
 3. **Global Binning**: Bins z from -0.6 to 0.6 (delz=0.025), averages var per bin (as in `baseline_fit.py` global plot).
 4. **Fit**: Fits var = σ₀² + (z-zoff)²/2 to binned averages, computes R².
-5. **Threshold**: R² ≥ 0.995 with no more than two free parameters wins the challenge (agreement of quantum with data is 0.998).
+5. **Threshold**: R² ≥ 0.995 with no more than three free parameters wins the challenge (agreement of quantum with data is 0.998). The price-change distribution in z should also be time-invariant, so the model should be independent of period length T.
 
 ### Test Your Submission
 Run the test mode to score your Parquet:
@@ -57,7 +57,6 @@ python3 score_submission.py
 4. Open a Pull Request titled: "Submission: [Your Team Name]"
 
 ## Frequently Asked Questions
-
 
 Q: What is q-variance – is it a well-known "stylized fact"?
 
@@ -89,7 +88,7 @@ A: Yes, it implies that price-change follows the q-distribution which is a parti
 
 Q: What is the point in using a classical model if the quantum model is an almost perfect match to the data?
 
-A: The quantum model predicts variance and the price-change distribution, but does not provide a time series of daily prices. If a classical model can do that, and still produce the quadratic shape, then that will be very useful. We will therefore also give an honorable mention to any classical entry which can come close to matching the quantum model even if it involves extra parameters (though parsimony is important in order to understand how the model works, otherwise it is just a fitting exercise).
+A: The quantum model predicts variance and the price-change distribution, but does not provide a time series of daily prices. If a classical model can do that, and still produce the quadratic shape, then that will be very useful. That is why we are giving the classical model an extra parameter (three instead of two).
 
 Q: How was the quantum model derived?
 
@@ -101,7 +100,7 @@ A. Nothing, other than the fact that some problems which couple probability and 
 
 Q: Can I use AI for the challenge?
 
-A: Yes, AI-assisted entries are encouraged. We used Grok to help design and code the challenge. Its [entry](submissions/grok_rough_vol) is a modified rough volatility model which achieves an R² of 0.986 but requires four parameters to do it, and is not time-invariant. The aim is to find a process which can achieve better results with fewer parameters.
+A: Yes, AI-assisted entries are encouraged. We used Grok to help design and code the challenge. Its [entry](submissions/grok_rough_vol) is a modified rough volatility model which achieves an R² of 0.986, however it uses four parameters and is not time-invariant so sadly does not meet the standard. The aim is to find a process which can achieve better results with fewer parameters.
 
 ## Further Reading
 
