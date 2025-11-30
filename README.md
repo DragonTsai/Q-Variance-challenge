@@ -18,7 +18,7 @@ Repository contains:
 - Scoring engine [score_submission.py](code/score_submission.py) for your model
 - Jupyter notebook [qvariance_single.ipynb](notebooks/qvariance_single.ipynb) showing how to compute q-variance for a single asset
 
-To test your model, first simulate a long price series using the model, then use data_loader.py to compute $\sigma^2(z)$ for each window and output the new parquet. Finally, score the results using score_submission.py.
+To get started, first simulate a long price series using your model, then use data_loader.py to compute $\sigma^2(z)$ for each window and output the new parquet. Finally, score the results using score_submission.py.
 
 The dataset used as a benchmark (~300K rows) is for 352 stocks from the S&P 500 (>25 year history), with periods T of 1–26 weeks T.  
 
@@ -39,7 +39,7 @@ The challenge scores submissions on **one global R²** over the **entire dataset
 1. **Load Submission**: `score_submission.py` reads your `dataset.parquet` (must match format: ticker, date, T, z, sigma).
 2. **Compute Variance**: Converts $\sigma$ → var = $\sigma^2$.
 3. **Global Binning**: Bins $z$ from -0.6 to 0.6, averages var per bin (as in `baseline_fit.py` global plot).
-4. **Fit**: Computes R² of binned averages to the q-variance curve $\sigma^2(z) = \sigma_0^2 + (z-z_0)^2/2$.
+4. **Fit**: Computes R² of your binned averages to the q-variance curve $\sigma^2(z) = \sigma_0^2 + (z-z_0)^2/2$.
 5. **Threshold**: R² ≥ 0.995 with no more than three free parameters (agreement of parabola with data is 0.998). The price-change distribution in $z$ should also be time-invariant, so the model should be independent of period length $T$.
 
 ### Test Your Submission
