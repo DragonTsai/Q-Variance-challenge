@@ -50,10 +50,6 @@ for ticker in TICKERS:
     print(f"→ {ticker}", end="")
     price = yf.download(ticker, period="max", progress=False, auto_adjust=True)["Close"]
     
-    if ticker == "^FTSE":
-        price = price.iloc[2021:10355]
-        print('truncate FTSE data to match R so 1992-2024')
-    
     ret = np.log(price).diff().dropna().values
 
     rows = []
