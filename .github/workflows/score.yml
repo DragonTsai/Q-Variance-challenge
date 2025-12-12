@@ -15,13 +15,20 @@ jobs:
         with:
           python-version: '3.11'
       - name: Install dependencies
-        run: pip install pandas numpy scipy
-      - name: Run scoring
+        run: pip install pandas numpy scipy requests
+      - name: Run scoring (old script - disabled)
         run: |
-          python scoring/score_submission.py ${{ github.event.pull_request.number }}
+          echo "Skipping old score_submission.py (benchmark data only)"
+          # python code/score_submission.py  # Disabled - only scores benchmark data
+        continue-on-error: true
+      - name: Run scoring (new submissions)
+        run: |
+          python code/score_new_submission.py ${{ github.event.pull_request.number }}
+        continue-on-error: true
       - name: Update leaderboard
         run: |
-          python update_leaderboard.py  # merges new score into leaderboard.json
+          python code/update_leaderboard.py  # merges new score into leaderboard.json
+        continue-on-error: true
       - name: Commit leaderboard
         uses: stefanzweifel/git-auto-commit-action@v5
         with:

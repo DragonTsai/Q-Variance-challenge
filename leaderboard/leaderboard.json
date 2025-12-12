@@ -1,0 +1,21 @@
+{
+  "last_updated": "2025-01-01T00:00:00",
+  "submissions": [
+    {
+      "name": "Quantum Baseline",
+      "author": "David Orrell",
+      "r2": 0.9528,
+      "params": 1,
+      "status": "Passed",
+      "date": "2025-07-01"
+    },
+    {
+      "name": "grok_rough_vol",
+      "author": "Grok (xAI)",
+      "r2": 0.8545,
+      "params": 4,
+      "status": "Failed",
+      "date": "2025-11-21"
+    }
+  ]
+}
