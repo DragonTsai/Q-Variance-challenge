@@ -109,7 +109,7 @@ A: Some great tries but no clear winner, see the summary [here](subsummary.md).
 
 Q: Okay, I'll bite. What is the quantum explanation?
 
-A: Price change over a period is due to an imbalance between buyers and sellers, which is like pushing on a spring. Variance goes with the energy, which varies with the square of the displacement. See sources below.
+A: Price change is like pushing on a spring. The linear restoring force gives you the square-root law of price impact. Integrating the force gives you the $z^2/2$ term in q-variance. But you need to use a probabilistic framework which accounts for dynamics. See sources below.
 
 Q: Sounds like quantum woo to me.
 
