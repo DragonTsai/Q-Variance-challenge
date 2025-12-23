@@ -6,11 +6,7 @@ The **Stochastic Volatility Model** describes the evolution of a security price 
 - $dS = \mu S dt + \sigma S dW$
 - $dV = \phi V dt + \xi V dZ$
 
-In this specific implementation, we assume the **volatility of volatility** is zero ($\xi = 0$). The drift of variance, $\phi$, is deriven by the absolute log-return of the asset: 
-$
-\phi = b \times \Delta \ln(S)
-$ 
-where $b$ is a free scaling parameter.
+In this specific implementation, we assume the **volatility of volatility** is zero ($\xi = 0$). The drift of variance, $\phi$, is deriven by the absolute log-return of the asset: $\phi = b \times \Delta \ln(S)$, where $b$ is a free scaling parameter.
 
 ## Parameters
 
@@ -23,13 +19,9 @@ There are 3 free parameters in the model:
 The simulation consists of 500 samples, each spanning 10,000 days. Starting from day 3, the discrete-time updates are calculated as follows:
 
 - Variance Update:
-$
-V_i = V_{i-1} \exp\left( b \cdot |\ln(S_{i-1} / S_{i-2})| \right),
-$
+$V_i = V_{i-1} \exp\left( b \cdot |\ln(S_{i-1} / S_{i-2})| \right)$
 - Price Update:
-$ 
-S_i = S_{i-1} \exp\left( \mu - \frac{\sigma_i^2}{2} + \sigma_i \epsilon \right) 
-$
+$S_i = S_{i-1} \exp\left( \mu - \frac{\sigma_i^2}{2} + \sigma_i \epsilon \right)$
 
 Note:
 * $\sigma_i = \sqrt{V_i}$
