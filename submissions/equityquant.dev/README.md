@@ -44,6 +44,28 @@ In the implementation:
 ```python
 tau = tau + kappa * (theta - tau_pos) * dt + eta * np.sqrt(tau_pos) * dW_tau
 
-Shock Intensity and Returns
+---
+## Shock Intensity and Returns
 
 Daily shock intensity is defined as an inverse function of precision:
+
+λ_t = c / τ_t
+
+Conditional on this intensity, the number of shocks on day t is drawn as:
+
+N_t ~ Poisson(λ_t)
+
+Given N_t, the daily log-return is generated as:
+
+r_t | N_t ~ Normal(0, s_unit² · N_t)
+
+This implies that return variance is proportional to realised shock activity.
+Returns are Gaussian conditional on N_t but heavy-tailed unconditionally, as
+expected for subordinated stochastic processes.
+
+In the implementation:
+N = rng.poisson(lam)
+r_t = rng.normal(0.0, s_unit * np.sqrt(N)) if N > 0 else 0.0
+
+
+
