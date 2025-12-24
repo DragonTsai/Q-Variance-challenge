@@ -1,9 +1,8 @@
-# EquityQuant.dev Model – Event-Driven Price Dynamics
+# EquityQuant.dev Model 
 
 **Team name:** equityquant.dev  
 **Contact:** Yi-Lung (Dragon) Tsai — ytsai@equityquant.dev
-
-**Model Description: See Below**
+**Model Description:** See Below
 ---
 
 ## Model Summary
