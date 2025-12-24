@@ -31,26 +31,23 @@ This construction ensures that:
 
 ## Latent Precision Process
 
-A positive latent process $\tau_t$ is simulated using a CIR-type diffusion:
+A positive latent process \( \tau_t \) governs market activity.  
+It is simulated using a **stationary mean-reverting positive diffusion** (CIR form, used purely for numerical convenience):
 
 $$
 d\tau_t = \kappa(\theta - \tau_t)\,dt + \eta \sqrt{\tau_t}\, dW_t
 $$
 
-This process is:
-
-- Strictly positive  
-- Stationary  
-- Mean-reverting  
 
 ### Interpretation
 
 - High $\tau$ → calm market regimes with low activity  
 - Low $\tau$ → turbulent regimes with elevated activity  
 
-Mean reversion ensures regime persistence while preventing degeneracy.
+Mean reversion ensures regime persistence while preventing degeneracy.  
+This latent process does **not** represent volatility.
 
-### Implementation
+### Python Implementation 
 
 `tau = tau + kappa * (theta - tau_pos) * dt + eta * sqrt(tau_pos) * dW_tau`
 
@@ -88,7 +85,7 @@ This implies:
 - Returns are Gaussian *conditional* on $N_t$  
 - Returns are **heavy-tailed unconditionally**, consistent with subordinated stochastic processes  
 
-### Implementation
+### Python Implementation 
 
 `N = Poisson(lam)`  
 `r_t = Normal(0, s_unit * sqrt(N)) if N > 0 else 0`
@@ -106,9 +103,12 @@ $$
 This ensures that:
 
 - $\sigma_0$ represents the **minimum volatility level**  
-- Corresponds to calm market regimes  
+- Corresponds to calm market regimes
+- 
+No additional free parameter is introduced at this stage;  
+the per-shock variance is fully determined by \( \sigma_0 \) and the stationary mean intensity.
 
-### Implementation
+### Python Implementation 
 
 `lambda_typ = c / theta`  
 `s_unit^2 = (sigma0^2 / 252) / lambda_typ`
@@ -144,7 +144,7 @@ The model uses **three effective free parameters**:
 |---------|------|------------|
 | $\sigma_0$ | 0.25 | Long-run annual volatility scale |
 | $\kappa$ | 0.02 | Mean-reversion speed of precision |
-| $c$ | 10.0 | Shock intensity scaling constant |
+| $c$ | 10.0 | Shock intensity scaling |
 
 These parameters control the scale and persistence of shock activity and were **not tuned** to fit the q-variance parabola.
 
@@ -154,14 +154,14 @@ These parameters control the scale and persistence of shock activity and were **
 
 All remaining parameters are fixed *a priori* for numerical stability and scale normalisation and were **not tuned** to achieve q-variance:
 
-| Parameter | Value | Purpose |
+| Parameter | Value | Description |
 |---------|------|--------|
-| `a_shape` | 1.5 | CIR discretisation shape parameter |
-| `lam_cap` | 500.0 | Upper bound on Poisson intensity (numerical safeguard) |
+| `a_shape` | 1.5 | Diffusion discretisation constant |
+| `lam_cap` | 500.0 | Poisson intensity cap (numerical safeguard) |
 | `dt` | 1 / 252 | Trading-day discretisation |
 | `seed` | 3 | Reproducibility only |
 | `s0` | 100.0 | Initial price |
-| `n_days` | — | Simulation length |
+| `n_days` | 120,000 | Simulation length |
 
 The Poisson cap is set sufficiently high that it is **rarely binding** and does not affect the fitted q-variance curve.
 
