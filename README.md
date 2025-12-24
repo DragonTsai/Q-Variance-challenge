@@ -70,7 +70,7 @@ A: No, a stylized fact is a general observation about market data, but q-varianc
 
 Q: Is it only noticeable over very long time series, or by averaging the results from hundreds of different stocks?
 
-A: No, you can see q-variance over normal time scales such as 20 years of data. It holds not just for stocks, but even for things like Bitcoin or bond yields (see the [article](Q-Variance_Wilmott_July2025.pdf)).
+A: No, you can see q-variance over normal time scales such as 20 years of data. It holds not just for stocks, but even for things like Bitcoin or bond yields (see the [article](Q-Variance_Wilmott_July2025.pdf)). If your model only seems to show q-variance over much longer simulations then it will be sensitive to small changes (e.g. to the exact simulation time) and it also won't be realistic.
 
 Q: Is q-variance about implied volatility?
 
