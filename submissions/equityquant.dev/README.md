@@ -1,4 +1,4 @@
-<img width="1892" height="860" alt="image" src="https://github.com/user-attachments/assets/1b90269e-6f7e-4ac2-a5d8-2368ca084a38" /># EquityQuant.dev Model 
+# EquityQuant.dev Model 
 
 **Team name:** equityquant.dev  
 **Model Description:** please see below
